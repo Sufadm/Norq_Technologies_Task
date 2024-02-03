@@ -1,29 +1,62 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:norq_technologies/model/hive_model.dart';
+import 'package:norq_technologies/view/presentation/products/cart_page.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+
+import 'package:norq_technologies/controller/auth_provider.dart';
+import 'package:norq_technologies/controller/auth_service.dart';
+import 'package:norq_technologies/controller/quantity.dart';
 import 'package:norq_technologies/firebase_options.dart';
-import 'package:norq_technologies/view/presentation/home_page.dart';
+import 'package:norq_technologies/model/user_model.dart';
+import 'package:norq_technologies/view/presentation/splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  if (!Hive.isAdapterRegistered(ProductModelsAdapter().typeId)) {
+    Hive.registerAdapter(ProductModelsAdapter());
+  }
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => LoginModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => QuantityProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return StreamProvider<UserModel?>.value(
+      value: AuthService().userlog,
+      initialData: null,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.deepPurple,
+          ),
+        ),
+        home: const SplashScreen(),
       ),
-      home: const HomePage(),
     );
   }
 }
