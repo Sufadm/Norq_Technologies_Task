@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1074397531016",
+    "project_id": "norqtechnologies",
+    "storage_bucket": "norqtechnologies.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074397531016:android:a15fd07b29878c3c08083d",
+        "android_client_info": {
+          "package_name": "com.example.norq_technologies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtXJMfXNSplp8uaSvawk09DHMazouC3wY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
