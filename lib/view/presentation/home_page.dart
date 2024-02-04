@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:norq_technologies/controller/products_api.dart';
 import 'package:norq_technologies/model/product_model.dart';
 import 'package:norq_technologies/view/presentation/products/cart_page.dart';
@@ -16,14 +17,22 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const CartPage();
-              }));
-            },
-            child: const Icon(Icons.card_travel)),
-        title: const Text("Product Page"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const CartPage();
+                  }));
+                },
+                child: const Icon(Icons.shopping_cart)),
+          )
+        ],
+        title: Text(
+          "Products Page",
+          style: GoogleFonts.lato(),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,8 +56,8 @@ class HomePage extends StatelessWidget {
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 2.0,
-                    mainAxisSpacing: 2.0,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
@@ -67,7 +76,10 @@ class HomePage extends StatelessWidget {
                               image: product.image);
                         }));
                       },
-                      child: Card(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black26)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -81,6 +93,7 @@ class HomePage extends StatelessWidget {
                             Text(
                               product.title.split(' ').take(2).join(' '),
                               textAlign: TextAlign.center,
+                              style: GoogleFonts.lato(),
                             ),
                             const SizedBox(height: 8.0),
                             Text(

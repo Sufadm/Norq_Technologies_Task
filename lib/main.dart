@@ -2,9 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:norq_technologies/model/hive_model.dart';
-import 'package:norq_technologies/view/presentation/products/cart_page.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
-
 import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
 import 'package:norq_technologies/controller/quantity.dart';

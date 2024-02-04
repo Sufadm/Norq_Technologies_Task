@@ -3,7 +3,7 @@ import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
 import 'package:norq_technologies/controller/fire_store.dart';
 import 'package:norq_technologies/model/register_model.dart';
-import 'package:norq_technologies/view/presentation/home_page.dart';
+import 'package:norq_technologies/view/presentation/bottom_nav.dart';
 import 'package:norq_technologies/view/widgets/custom_button.dart';
 import 'package:norq_technologies/view/widgets/text_form_widget.dart';
 import 'package:provider/provider.dart';
@@ -119,11 +119,12 @@ class RegistrationPage extends StatelessWidget {
                                         confirmPassword:
                                             registerModel.confirmpassword,
                                       );
+                                      print('User created successfully');
 
-                                      await FirestoreService().createUser(user);
+                                      FirestoreService().createUser(user);
                                       Navigator.pushReplacement(context,
                                           MaterialPageRoute(builder: (context) {
-                                        return const HomePage();
+                                        return const MyNavigationBar();
                                       }));
                                     } catch (error) {
                                       registerModel.setError(error.toString());

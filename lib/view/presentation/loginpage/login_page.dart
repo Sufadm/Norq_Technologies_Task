@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
-import 'package:norq_technologies/view/presentation/home_page.dart';
+import 'package:norq_technologies/view/presentation/bottom_nav.dart';
 import 'package:norq_technologies/view/presentation/loginpage/registration_page.dart';
 import 'package:norq_technologies/view/widgets/custom_button.dart';
 import 'package:norq_technologies/view/widgets/text_form_widget.dart';
@@ -97,7 +97,8 @@ class LoginPage extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const HomePage()),
+                                        builder: (context) =>
+                                            const MyNavigationBar()),
                                   );
                                   loginModel.loading = false;
                                 }
