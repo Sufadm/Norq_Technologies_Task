@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:norq_technologies/controller/auth_service.dart';
 import 'package:norq_technologies/view/presentation/home_page.dart';
 import 'package:norq_technologies/view/presentation/loginpage/login_page.dart';
 
@@ -10,6 +11,7 @@ class MyNavigationBar extends StatefulWidget {
 }
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
+  final AuthService auth = AuthService();
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -33,7 +35,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              onPressed: () {
+              onPressed: () async {
+                await auth.logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   return LoginPage();
