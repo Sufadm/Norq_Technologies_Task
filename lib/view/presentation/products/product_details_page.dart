@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:norq_technologies/model/hive_model.dart';
+import 'package:norq_technologies/model/user_model.dart';
 import 'package:norq_technologies/view/const/const.dart';
 import 'package:norq_technologies/view/presentation/products/cart_page.dart';
 
@@ -27,6 +29,8 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       appBar: AppBar(),
       backgroundColor: Colors.white,
@@ -130,10 +134,13 @@ class ProductDetailsPage extends StatelessWidget {
                 child: Container(
                   height: 50,
                   color: Colors.orange,
-                  child: Center(
-                    child: Text(
-                      "Buy Now",
-                      style: GoogleFonts.lato(),
+                  child: InkWell(
+                    onTap: () => print(UserModel().uid),
+                    child: Center(
+                      child: Text(
+                        "Buy Now",
+                        style: GoogleFonts.lato(),
+                      ),
                     ),
                   ),
                 ),

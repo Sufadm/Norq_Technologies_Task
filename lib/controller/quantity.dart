@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
-class QuantityProvider extends ChangeNotifier {
-  int quantity = 1;
+import 'package:flutter/foundation.dart';
+
+class QuantityProvider with ChangeNotifier {
+  int _quantity = 1;
+
+  int get quantity => _quantity;
 
   void increment() {
-    quantity++;
+    _quantity++;
     notifyListeners();
   }
 
   void decrement() {
-    if (quantity > 1) {
-      quantity--;
+    if (_quantity > 1) {
+      _quantity--;
       notifyListeners();
     }
   }

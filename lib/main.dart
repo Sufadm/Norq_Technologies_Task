@@ -33,7 +33,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (context) {
           return PasswordVisibilityProvider();
-        })
+        }),
       ],
       child: const MyApp(),
     ),

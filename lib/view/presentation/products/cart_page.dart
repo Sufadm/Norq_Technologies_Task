@@ -15,6 +15,8 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late List<ProductModels> cartItems;
+  late List<QuantityProvider> quantityProviders;
+  double netTotal = 0.0;
 
   @override
   void initState() {
@@ -26,6 +28,9 @@ class _CartPageState extends State<CartPage> {
     final box = await Hive.openBox<ProductModels>('purchase_box');
     setState(() {
       cartItems = box.values.toList();
+      quantityProviders =
+          List.generate(cartItems.length, (_) => QuantityProvider());
+      updateNetTotal();
     });
   }
 
@@ -33,6 +38,21 @@ class _CartPageState extends State<CartPage> {
     final box = await Hive.openBox<ProductModels>('purchase_box');
     await box.delete(product.key);
     fetchCartItems();
+  }
+
+  void updateNetTotal() {
+    double total = 0.0;
+    for (int i = 0; i < cartItems.length; i++) {
+      final double parsedPrice = double.tryParse(
+            cartItems[i].price.replaceAll(RegExp(r'[^0-9.]'), ''),
+          ) ??
+          0.0;
+
+      total += parsedPrice * quantityProviders[i].quantity;
+    }
+    setState(() {
+      netTotal = total;
+    });
   }
 
   @override
@@ -49,41 +69,39 @@ class _CartPageState extends State<CartPage> {
       body: SafeArea(
         child: cartItems.isEmpty
             ? const Center(child: Text('No product in the cart.'))
-            : CartList(cartItems: cartItems, onProductRemoved: removeProduct),
+            : Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => const Divider(
+                    thickness: 2,
+                  ),
+                  itemCount: cartItems.length,
+                  itemBuilder: (context, index) {
+                    final product = cartItems[index];
+
+                    return ChangeNotifierProvider.value(
+                      value: quantityProviders[index],
+                      child: CartItem(
+                        product: product,
+                        onProductRemoved: () {
+                          removeProduct(product);
+                          updateNetTotal();
+                        },
+                        updateNetTotal: updateNetTotal,
+                      ),
+                    );
+                  },
+                ),
+              ),
       ),
-    );
-  }
-}
-
-class CartList extends StatelessWidget {
-  final List<ProductModels> cartItems;
-  final Function(ProductModels) onProductRemoved;
-
-  const CartList({
-    Key? key,
-    required this.cartItems,
-    required this.onProductRemoved,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const Divider(
-          thickness: 2,
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromARGB(255, 128, 158, 173),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Net Total: ₹$netTotal",
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-        itemCount: cartItems.length,
-        itemBuilder: (context, index) {
-          final product = cartItems[index];
-
-          return ChangeNotifierProvider(
-            create: (_) => QuantityProvider(),
-            child: CartItem(
-              product: product,
-              onProductRemoved: () => onProductRemoved(product),
-            ),
-          );
-        },
       ),
     );
   }
@@ -92,21 +110,25 @@ class CartList extends StatelessWidget {
 class CartItem extends StatelessWidget {
   final ProductModels product;
   final VoidCallback onProductRemoved;
+  final VoidCallback updateNetTotal;
 
   const CartItem({
     Key? key,
     required this.product,
     required this.onProductRemoved,
+    required this.updateNetTotal,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          height: 200,
-          width: 200,
-          child: Image.network(product.image),
+        Expanded(
+          child: SizedBox(
+            height: 200,
+            width: 200,
+            child: Image.network(product.image),
+          ),
         ),
         Consumer<QuantityProvider>(
           builder: (context, quantityProvider, _) {
@@ -161,6 +183,7 @@ class CartItem extends StatelessWidget {
                             icon: const Icon(Icons.remove),
                             onPressed: () {
                               quantityProvider.decrement();
+                              updateNetTotal();
                             },
                           ),
                           Container(
@@ -186,6 +209,7 @@ class CartItem extends StatelessWidget {
                             icon: const Icon(Icons.add),
                             onPressed: () {
                               quantityProvider.increment();
+                              updateNetTotal();
                             },
                           ),
                         ],
@@ -196,6 +220,7 @@ class CartItem extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     onProductRemoved();
+                    updateNetTotal();
                   },
                   child: const Text("REMOVE"),
                 )
