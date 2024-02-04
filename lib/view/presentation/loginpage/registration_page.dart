@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
 import 'package:norq_technologies/controller/fire_store.dart';
+import 'package:norq_technologies/controller/paswword_visibility.dart';
 import 'package:norq_technologies/model/register_model.dart';
 import 'package:norq_technologies/view/presentation/bottom_nav.dart';
 import 'package:norq_technologies/view/widgets/custom_button.dart';
@@ -19,6 +20,10 @@ class RegistrationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final passwordVisibilityProvider =
+        Provider.of<PasswordVisibilityProvider>(context);
+    final passwordVisibilityProvider1 =
+        Provider.of<PasswordVisibilityProvider>(context);
     return ChangeNotifierProvider<RegisterModel>(
       create: (_) => RegisterModel(),
       child: Scaffold(
@@ -55,6 +60,17 @@ class RegistrationPage extends StatelessWidget {
                       height: 10,
                     ),
                     TextFormFieldWidget(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          passwordVisibilityProvider.isObscure
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          passwordVisibilityProvider.toggleVisibility();
+                        },
+                      ),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Enter Password';
@@ -63,13 +79,24 @@ class RegistrationPage extends StatelessWidget {
                       },
                       hintText: 'Password',
                       icon: Icons.lock,
-                      obscureText: true,
+                      obscureText: passwordVisibilityProvider.isObscure,
                       onChanged: registerModel.updatePassword,
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormFieldWidget(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          passwordVisibilityProvider1.isObscure1
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          passwordVisibilityProvider1.toggleVisibility1();
+                        },
+                      ),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Enter Confirm Password';
@@ -81,7 +108,7 @@ class RegistrationPage extends StatelessWidget {
                       },
                       hintText: 'Confirm Password',
                       icon: Icons.lock,
-                      obscureText: true,
+                      obscureText: passwordVisibilityProvider1.isObscure1,
                       onChanged: registerModel.updatePasswordagain,
                     ),
                     const SizedBox(

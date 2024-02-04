@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:norq_technologies/controller/paswword_visibility.dart';
 import 'package:norq_technologies/model/hive_model.dart';
 import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
@@ -30,6 +31,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => QuantityProvider(),
         ),
+        ChangeNotifierProvider(create: (context) {
+          return PasswordVisibilityProvider();
+        })
       ],
       child: const MyApp(),
     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:norq_technologies/controller/auth_provider.dart';
 import 'package:norq_technologies/controller/auth_service.dart';
+import 'package:norq_technologies/controller/paswword_visibility.dart';
 import 'package:norq_technologies/view/presentation/bottom_nav.dart';
 import 'package:norq_technologies/view/presentation/loginpage/registration_page.dart';
 import 'package:norq_technologies/view/widgets/custom_button.dart';
@@ -14,6 +15,8 @@ class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final passwordVisibilityProvider =
+        Provider.of<PasswordVisibilityProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -53,13 +56,24 @@ class LoginPage extends StatelessWidget {
                   'Password',
                 ),
                 TextFormFieldWidget(
-                  obscureText: true,
+                  obscureText: passwordVisibilityProvider.isObscure,
                   validator: (value) =>
                       value!.length < 3 ? 'Please enter a password' : null,
                   onChanged: (value) =>
                       Provider.of<LoginModel>(context, listen: false)
                           .updatePassword(value),
                   hintText: 'Enter your password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      passwordVisibilityProvider.isObscure
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      passwordVisibilityProvider.toggleVisibility();
+                    },
+                  ),
                   icon: Icons.lock,
                 ),
                 const SizedBox(

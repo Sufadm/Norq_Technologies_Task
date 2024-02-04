@@ -68,7 +68,10 @@ class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          thickness: 2,
+        ),
         itemCount: cartItems.length,
         itemBuilder: (context, index) {
           final product = cartItems[index];

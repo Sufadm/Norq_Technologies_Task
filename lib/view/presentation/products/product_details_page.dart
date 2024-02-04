@@ -162,7 +162,6 @@ class ProductDetailsPage extends StatelessWidget {
                       } else {
                         print('Product already exists in the cart');
                       }
-
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return const CartPage();
